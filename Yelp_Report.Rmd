@@ -1,0 +1,155 @@
+---
+title: "Yelp_Report"
+author: "Rushil Bansal"
+date: "`r Sys.Date()`"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include = FALSE}
+setwd("C:/Users/User/Desktop/EC349/Workings")
+source("Yelp Analysis.R")
+```
+
+I. Business Understanding
+
+My objectives are to understand the key drivers behind good (and bad)
+reviews, and use these findings to train a model to predict the number
+of stars given by a user to a business for a specific review. Success
+will be evaluated in using root mean square error, and could provide
+actionable insights to businesses to boost their visibility and average
+ratings on Yelp.
+
+II\. Data Understanding
+
+There are 5 datasets provided, Reviews, Users, Businesses, Check-ins,
+and Tips. Based on the Yelp Documentation, I discarded the Check-ins and
+Tips datasets since I could not interpret a causal relationship between
+the variables in these data sets and the number of stars given by a
+user. Initially, I thought a combination of review text, and average
+stars given by the target user and received by the target business would
+be the most meaningful.
+
+Simple visualisations of the relationship between key variables such as
+review counts for users and for businesses against corresponding average
+stars surprisingly yielded some relationship, and average star rating of
+each business by the state it operates in also demonstrated meaningful
+variance.
+
+```{r}
+ggplot(review_data_small, aes(x = stars)) + 
+  geom_histogram(bins = 30, col= "white")
+
+ggplot(user_data_small, aes(x=average_stars)) +
+  geom_density(kernel="gaussian")
+
+ggplot(business_data, aes(x=stars, y=review_count)) + 
+  geom_point()
+
+ggplot(business_data, aes(x = state)) + 
+  geom_bar() + scale_y_log10()
+
+ggplot(business_data, aes(x=state,y=stars)) +
+  geom_col()
+
+print(business_status_avg)
+  
+```
+
+III\. Data Preparation
+
+The bulk of my data preparation was in the form of text analysis. I used
+the tf-idf statistic, which is intended to measure how important a word
+is to a document in a collection of documents (Silge & Robinson), or in
+this case how important a word is to a star rating in a collection of
+reviews. After breaking down review texts into one word per row, making
+lowercase, removing punctuation, numbers, and common stop words, the
+data was still fairly dirty -- with illegible phrases and combinations
+of letters with a low n (number of occurrences per star rating). Upon
+iterating, I found removing words with less than 20 instances for any
+given star rating led to a powerful collection of impactful and
+meaningful words when sorted by tf-idf score, such as \"crooks\" and
+\"unethical\" for 1 star ratings, and \"scrumptious\" and \"delectable\"
+for 5 star ratings.
+
+```{r}
+reviews_tfidf %>%
+  group_by(stars) %>%
+  slice_max(tf_idf, n = 15) %>%
+  ungroup() %>%
+  ggplot(aes(tf_idf, fct_reorder(word, tf_idf), fill = stars)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~stars, ncol = 2, scales = "free") +
+  labs(x = "tf-idf", y = NULL)
+```
+
+Following on from this, I used a min-max normalisation to normalise the
+tf-idf statistic for each word, and to account for certain words being
+part of multiple star ratings, I used an occurrence weighted average to
+create scores for each word. Summing the product of these scores with
+the number of times the word occurred in the review led to an overall
+\"sentiment\" score for the review, which was one of the variables in my
+model.
+
+Upon merging review stars, sentiment score, average stars for users and
+businesses, review counts for users and businesses, business open
+status, and business state, I had to omit a small number of rows (12
+rows) with missing values. I chose to omit these rows instead of
+imputing mean values since it was such a small number of instances
+compared to the size of the data frame.
+
+IV\. Modelling
+
+The use of a random forest model came down to the predictive nature of
+the task alongside the size and complexity of the datasets. A decision
+tree model with such a large set of data would likely result in a high
+ρσ^2^ term in the variance, whereas a random forest creates an ensemble
+of decision trees, with each one trained on a different subset of the
+data and thus reducing variance without significantly increasing bias.
+Since we use a random subset of features at each split, trees and
+branches are less likely to be identical and the ρ value, or the
+correlation between predictions, is close to 0.
+
+V. Evaluation
+
+Using 50 trees in my random forest model, my model arrived at an MSE of
+0.579, and an accuracy of 57.3%. This error rate is reasonably high and
+may be due to three reasons. Firstly, the number of trees used is
+relatively low, due to lack of computational power. Secondly, using only
+7 variables is fairly low given the complexity of the dataset. However,
+this is primarily to avoid overfitting and preserve the interpretability
+of the model. Thirdly, the sentiment score calculation can be made more
+accurate through topical modelling using LDA or other techniques.
+
+The confusion matrix below shows the variation in balanced accuracy by
+star rating. According to the model, 1 star and 5 star reviews are
+easiest to predict and this is expected, since sentiment scores are most
+representative for extreme reviews due to aggressive words being used.
+
+```{r}
+confusionMatrix(predictions, test$stars)
+```
+
+VI\. Biggest Challenge
+
+My biggest challenge was working in R. I frequently had problems with
+cleaning my code which resulted in extraordinary memory usage and
+computation time, amplified by a lack of computational power. To combat
+this, I have had to use shorthand methods of clearning unused data-sets
+before modelling.
+
+VII\. Data Science Methodology
+
+I began with the Cross-Industry Standard Process for Data Mining
+(CRISP-DM) because I found it very intuitive, and hence allowed me to
+structure my natural thoughts in a manner which is the de-facto in the
+industry. Throughout the processs however, I found that it is structured
+but also flexible at the same time, as it has allowed me to iterate many
+processes such as data preparation before trying to model, and then
+re-preparing data to better fit the model
