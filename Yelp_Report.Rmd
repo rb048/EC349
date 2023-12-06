@@ -1,0 +1,275 @@
+---
+title: "Yelp_Report"
+author: "Rushil Bansal"
+date: "`r Sys.Date()`"
+output:
+  html_document: default
+  pdf_document: default
+editor_options:
+  markdown:
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include = FALSE}
+setwd("C:/Users/User/Desktop/EC349/Workings")
+source("Yelp Analysis.R")
+```
+
+**Github Link:
+[github.com/rb048/EC349/tree/main#EC349](github.com/rb048/EC349/tree/main#EC349)**
+
+**Tabula statement**
+
+We're part of an academic community at Warwick.
+
+Whether studying, teaching, or researching, we're all taking part in an
+expert conversation which must meet standards of academic integrity.
+When we all meet these standards, we can take pride in our own academic
+achievements, as individuals and as an academic community.
+
+Academic integrity means committing to honesty in academic work, giving
+credit where we've used others' ideas and being proud of our own
+achievements.
+
+In submitting my work I confirm that:
+
+1\. I have read the guidance on academic integrity provided in the
+Student Handbook and understand the University regulations in relation
+to Academic Integrity. I am aware of the potential consequences of
+Academic Misconduct.
+
+2\. I declare that the work is all my own, except where I have stated
+otherwise.
+
+3\. No substantial part(s) of the work submitted here has also been
+submitted by me in other credit bearing assessments courses of study
+(other than in certain cases of a resubmission of a piece of work), and
+I acknowledge that if this has been done this may lead to an appropriate
+sanction.
+
+4\. Where a generative Artificial Intelligence such as ChatGPT has been
+used I confirm I have abided by both the University guidance and
+specific requirements as set out in the Student Handbook and the
+Assessment brief. I have clearly acknowledged the use of any generative
+Artificial Intelligence in my submission, my reasoning for using it and
+which generative AI (or AIs) I have used. Except where indicated the
+work is otherwise entirely my own.
+
+5\. I understand that should this piece of work raise concerns requiring
+investigation in relation to any of points above, it is possible that
+other work I have submitted for assessment will be checked, even if
+marks (provisional or confirmed) have been published.
+
+6\. Where a proof-reader, paid or unpaid was used, I confirm that the
+proofreader was made aware of and has complied with the University's
+proofreading policy.
+
+7\. I consent that my work may be submitted to Turnitin or other
+analytical technology. I understand the use of this service (or
+similar), along with other methods of maintaining the integrity of the
+academic process, will help the University uphold academic standards and
+assessment fairness.
+
+Privacy statement
+
+The data on this form relates to your submission of coursework. The date
+and time of your submission, your identity, and the work you have
+submitted will be stored. We will only use this data to administer and
+record your coursework submission.
+
+Related articles
+
+[Reg. 11 Academic Integrity (from 4 Oct
+2021)](https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwarwick.ac.uk%2Fservices%2Fgov%2Fcalendar%2Fsection2%2Fregulations%2Facademic_integrity%2F&data=05%7C01%7CRushil.Bansal%40warwick.ac.uk%7C4dd142f8cc154001823908dbf19221e9%7C09bacfbd47ef446592653546f2eaf6bc%7C0%7C0%7C638369382186517743%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=7%2FMFmkN5BzSS%2FZ6kSVBKzkAWjQv3PsNvnGZnGhrpirE%3D&reserved=0 "Original URL: https://warwick.ac.uk/services/gov/calendar/section2/regulations/academic_integrity/. Click or tap if you trust this link.")
+
+[Guidance on Regulation
+11](https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwarwick.ac.uk%2Fservices%2Faro%2Fdar%2Fquality%2Faz%2Facintegrity%2Fframework%2Fguidancereg11%2F&data=05%7C01%7CRushil.Bansal%40warwick.ac.uk%7C4dd142f8cc154001823908dbf19221e9%7C09bacfbd47ef446592653546f2eaf6bc%7C0%7C0%7C638369382186526961%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=DksO0dsxi4YBwQ9jUTR2VVJeyhLRPr1DRmBsUfw3olg%3D&reserved=0 "Original URL: https://warwick.ac.uk/services/aro/dar/quality/az/acintegrity/framework/guidancereg11/. Click or tap if you trust this link.")
+
+[Proofreading
+Policy](https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwarwick.ac.uk%2Fservices%2Faro%2Fdar%2Fquality%2Fcategories%2Fexaminations%2Fpolicies%2Fv_proofreading%2F&data=05%7C01%7CRushil.Bansal%40warwick.ac.uk%7C4dd142f8cc154001823908dbf19221e9%7C09bacfbd47ef446592653546f2eaf6bc%7C0%7C0%7C638369382186533262%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=SzJfIs0%2FLo9OYi6jEH66%2Blm78azK3RGV%2BeJM3ApCwII%3D&reserved=0 "Original URL: https://warwick.ac.uk/services/aro/dar/quality/categories/examinations/policies/v_proofreading/. Click or tap if you trust this link.") 
+
+[Education Policy and Quality
+Team](https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwarwick.ac.uk%2Fservices%2Faro%2Fdar%2Fquality%2Faz%2Facintegrity%2Fframework%2Fguidancereg11%2F&data=05%7C01%7CRushil.Bansal%40warwick.ac.uk%7C4dd142f8cc154001823908dbf19221e9%7C09bacfbd47ef446592653546f2eaf6bc%7C0%7C0%7C638369382186539574%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=kNlTWca%2BZw4YQ6h3j1Zaw3qfPD3OuPyTE4MliCQL5%2Bs%3D&reserved=0 "Original URL: https://warwick.ac.uk/services/aro/dar/quality/az/acintegrity/framework/guidancereg11/. Click or tap if you trust this link.")
+
+[Academic Integrity
+(warwick.ac.uk)](https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwarwick.ac.uk%2Fstudents%2Flearning-experience%2Facademic_integrity&data=05%7C01%7CRushil.Bansal%40warwick.ac.uk%7C4dd142f8cc154001823908dbf19221e9%7C09bacfbd47ef446592653546f2eaf6bc%7C0%7C0%7C638369382186545866%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=yOR%2FV3BU9YsN7IyeMqxIojkywTfK2i%2FWrNHc6bOg3wI%3D&reserved=0 "Original URL: https://warwick.ac.uk/students/learning-experience/academic_integrity. Click or tap if you trust this link.")
+
+**I. Business Understanding**
+
+My objectives are to understand the key drivers behind good (and bad)
+reviews, and use these findings to train a model to predict the number
+of stars given by a user to a business for a specific review. Success
+will be evaluated in using root mean square error, and could provide
+actionable insights to businesses to boost their visibility and average
+ratings on Yelp.
+
+**II. Data Understanding**
+
+There are 5 datasets provided, Reviews, Users, Businesses, Check-ins,
+and Tips. Based on the Yelp Documentation, I discarded the Check-ins and
+Tips datasets since I could not interpret a causal relationship between
+the variables in these data sets and the number of stars given by a
+user. Initially, I thought a combination of review text, and average
+stars given by the target user and received by the target business would
+be the most meaningful.
+
+Simple visualisations of the relationship between key variables such as
+review counts for users and for businesses against corresponding average
+stars surprisingly yielded some relationship, and average star rating of
+each business by the state it operates in also demonstrated meaningful
+variance.
+
+```{r}
+ggplot(review_data_small, aes(x = stars)) + 
+  geom_histogram(bins = 30, col= "white")
+
+ggplot(user_data_small, aes(x=average_stars)) +
+  geom_density(kernel="gaussian")
+
+ggplot(business_data, aes(x=stars, y=review_count)) + 
+  geom_point()
+
+ggplot(business_data, aes(x = state)) + 
+  geom_bar() + scale_y_log10()
+
+ggplot(business_data, aes(x=state,y=stars)) +
+  geom_col()
+
+print(business_status_avg)
+  
+```
+
+**III. Data Preparation**
+
+The bulk of my data preparation was in the form of text analysis. I used
+the tf-idf statistic, which is intended to measure how important a word
+is to a document in a collection of documents (Silge & Robinson), or in
+this case how important a word is to a star rating in a collection of
+reviews. After breaking down review texts into one word per row, making
+lowercase, removing punctuation, numbers, and common stop words, the
+data was still fairly dirty -- with illegible phrases and combinations
+of letters with a low n (number of occurrences per star rating). Upon
+iterating, I found removing words with less than 20 instances for any
+given star rating led to a powerful collection of impactful and
+meaningful words when sorted by tf-idf score, such as "crooks" and
+"unethical" for 1 star ratings, and "scrumptious" and "delectable" for 5
+star ratings.
+
+```{r}
+reviews_tfidf %>%
+  group_by(stars) %>%
+  slice_max(tf_idf, n = 15) %>%
+  ungroup() %>%
+  ggplot(aes(tf_idf, fct_reorder(word, tf_idf), fill = stars)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~stars, ncol = 3, scales = "free") +
+  labs(x = "tf-idf", y = NULL)
+```
+
+Following on from this, I used a min-max normalisation to normalise the
+tf-idf statistic for each word, and to account for certain words being
+part of multiple star ratings, I used an occurrence weighted average to
+create scores for each word. Summing the product of these scores with
+the number of times the word occurred in the review led to an overall
+"sentiment" score for the review, which was one of the variables in my
+model.
+
+Upon merging review stars, sentiment score, average stars for users and
+businesses, review counts for users and businesses, business open
+status, and business state, I had to omit a small number of rows (12
+rows) with missing values. I chose to omit these rows instead of
+imputing mean values since it was such a small number of instances
+compared to the size of the data frame.
+
+**IV. Modelling**
+
+The use of a random forest model came down to the predictive nature of
+the task alongside the size and complexity of the datasets. A decision
+tree model with such a large set of data would likely result in a high
+ρσ^2^ term in the variance, whereas a random forest creates an ensemble
+of decision trees, with each one trained on a different subset of the
+data and thus reducing variance without significantly increasing bias.
+Since we use a random subset of features at each split, trees and
+branches are less likely to be identical and the ρ value, or the
+correlation between predictions, is close to 0.
+
+**V. Evaluation**
+
+Using 50 trees in my random forest model, my model arrived at an MSE of
+0.579, and an accuracy of 57.3%. This error rate is reasonably high and
+may be due to three reasons:\
+Firstly, the number of trees used is relatively low, due to lack of
+computational power.\
+Secondly, using only 7 variables is fairly low given the complexity of
+the dataset. However, this is primarily to avoid overfitting and
+preserve the interpretability ndefinedof the model.\
+Thirdly, the sentiment score calculation can be made more accurate
+through topical modelling using LDA or other techniques, and also by
+using a sentiment lexicon instead of tf-idf statistics.
+
+A feature importance plot below shows that the average stars a user has
+given was the most significant predictor in the number of stars a user
+gives in a review, as expected intuitively. However, I was surprised
+that the remaining features in my model, namely state, business average
+stars, my computed sentiment score, user review count, and business
+review count were as even in importance as displayed below. I expected
+user stars and business stars to be by far the largest predictors.
+
+```{r}
+importance_df <- as.data.frame(importance(model))
+ggplot(importance_df, aes(x = reorder(row.names(importance_df), MeanDecreaseGini), y = MeanDecreaseGini)) +
+    geom_bar(stat = "identity") +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+    labs(x = "Features", y = "Importance", title = "Feature Importance")
+```
+
+The confusion matrix below shows the variation in accuracy by star
+rating. According to the model, 1 star and 5 star reviews are easiest to
+predict and this is expected, since sentiment scores are most
+representative for extreme reviews due to aggressive words being used.
+Overall, there are not many surprises in the confusion matrix data,
+since it reveals a fairly balanced output of predictions vs. actuals.
+
+```{r}
+conf_matrix<-confusionMatrix(predictions, test$stars)
+conf_matrix_df <- as.data.frame(conf_matrix$table)
+
+ggplot(conf_matrix_df, aes(x = Reference, y = Prediction)) +
+    geom_tile(aes(fill = Freq), colour = "white") +  # Heatmap-style tiles
+    geom_text(aes(label = sprintf("%0.0f", Freq)), vjust = 1) +  # Add frequencies
+    scale_fill_gradient(low = "white", high = "steelblue") +  # Gradient color
+    theme_minimal() +
+    labs(fill = "Count", x = "Actual Class", y = "Predicted Class", title = "Confusion Matrix")
+```
+
+**VI. Biggest Challenge**
+
+My biggest challenge was working in R. I frequently had problems with
+cleaning my code which resulted in extraordinary memory usage and
+computation time, amplified by a lack of computational power. To combat
+this, I have had to use shorthand methods of cleaning unused data-sets
+before modelling.
+
+**VII. Data Science Methodology**
+
+I began with the Cross-Industry Standard Process for Data Mining
+(CRISP-DM) because I found it very intuitive, and hence allowed me to
+structure my natural thoughts in a manner which is the de-facto in the
+industry. Throughout the processs, I found that it is structured but
+also flexible at the same time, as it has allowed me to iterate many
+processes such as data preparation before trying to model, and then
+re-preparing data to better fit the model.
+
+**References:**
+
+1.  Grolemund, G. & Wickham, H. 2016. R for Data Science: Import, Tidy,
+    Transform Visualise, and Model Data.
+2.  Hastie, T.; Tibshirani, R.; Friedman, J. H.; & Friedman, J. H. 2009.
+    The Elements of Statistical Learning: Data Mining, Inference, and
+    Prediction (Vol. 2). New York: Springer. Ebook and Print Book
+    Available at the Warwick Library.
+3.  Silge, J. & Robinson, D. 2017. Text Mining with R: A Tidy Approach.
